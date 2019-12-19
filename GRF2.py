@@ -22,7 +22,7 @@ class myThread (threading.Thread):
 
     def Stop(self):
         self.capture.release()
-        #self.stop = True
+        self.stop = True
 
     def read(self):
         return self.ret, self.frame
@@ -44,8 +44,8 @@ while capture.isOpened():
     ret, frame = capture.read()
     
     # Get hand data from the rectangle sub window   
-    cv2.rectangle(frame,(100,100),(200,200),(0,255,0),0)
-    crop_image = frame[100:200, 100:200]
+    cv2.rectangle(frame,(100,100),(300,300),(0,255,0),0)
+    crop_image = frame[100:300, 100:300]
     
     # Apply Gaussian blur
     blur = cv2.GaussianBlur(crop_image, (3,3), 0)
@@ -114,7 +114,7 @@ while capture.isOpened():
             cv2.line(crop_image,start,end,[0,255,0],2)
 
         # Press SPACE if condition is match
-        if count_defects >= 10:
+        if count_defects >= 4:
             pyautogui.press('space')
             cv2.putText(frame,"JUMP", (115,80), cv2.FONT_HERSHEY_SIMPLEX, 2, 2, 2)
 
@@ -125,8 +125,8 @@ while capture.isOpened():
     cv2.imshow("Gesture", frame)
      
     # Close the camera if 'q' is pressed
-    if (cv2.waitKey(1)& 0xFF == ord('q')):
+    if cv2.waitKey(1) == ord('q'):
         thread.Stop()
         break       
-capture.release()
+
 cv2.destroyAllWindows()
